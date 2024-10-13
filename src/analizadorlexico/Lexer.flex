@@ -17,13 +17,11 @@ espacio=[ \t\r\n]+
 
 %%
 
-// Palabras reservadas
 "if" {lexeme=yytext(); return If;}
 "else" {lexeme=yytext(); return Else;}
 "int" {lexeme=yytext(); return Int;}
 "while" {lexeme=yytext(); return While;}
 
-// Operadores y otros símbolos
 "=" {return Igual;}
 "+" {return Suma;}
 "-" {return Resta;}
@@ -36,7 +34,7 @@ espacio=[ \t\r\n]+
 ">=" {return MayorIgual;}
 "!=" {return Distinto;}
 
-// Delimitadores
+
 "(" {return ParenAbierto;}
 ")" {return ParenCerrado;}
 "{" {return LlaveAbierta;}
@@ -44,16 +42,16 @@ espacio=[ \t\r\n]+
 ";" {return PuntoYComa;}
 "," {return Coma;}
 
-// Ignorar comentarios y espacios
+
 {espacio} {/* Ignore */}
 "//".* {/* Ignore */}
 "/*"([^*]|\*+[^*/])*\*+"/" {/* Ignore */}
 
-// Identificadores y números
+
 {L} {lexeme=yytext(); return Identificador;}
 {DECIMAL} {lexeme=yytext(); return NumeroDecimal;}
 {NEGATIVO} {lexeme=yytext(); return NumeroEntero;}
 {D} {lexeme=yytext(); return NumeroEntero;}
 
-// Cualquier otro carácter es un error
+
 . {return ERROR;}
