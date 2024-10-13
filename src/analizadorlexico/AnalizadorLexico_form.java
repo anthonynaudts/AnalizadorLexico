@@ -45,6 +45,9 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
         btnAnalizar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtErrores = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizados léxico");
@@ -71,6 +74,15 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
 
         jLabel2.setText("Resultado");
 
+        txtErrores.setEditable(false);
+        txtErrores.setBackground(new java.awt.Color(204, 204, 204));
+        txtErrores.setColumns(20);
+        txtErrores.setForeground(new java.awt.Color(0, 0, 0));
+        txtErrores.setRows(5);
+        jScrollPane3.setViewportView(txtErrores);
+
+        jLabel3.setText("Errores");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,18 +91,25 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAnalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)))
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane3))))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -98,7 +117,11 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(2, 2, 2)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAnalizar)
                 .addGap(12, 12, 12))
         );
@@ -122,16 +145,19 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
             Reader lector = new BufferedReader(new FileReader("archivo.txt"));
             Lexer lexer = new Lexer(lector);
             String resultado = "";
+            String errores = "";
             while (true) {
                 Tokens tokens = lexer.yylex();
                 if (tokens == null) {
                     resultado += "FIN";
                     txtResultado.setText(resultado);
+                    txtErrores.setText(errores);
                     return;
                 }
                 switch (tokens) {
                     case ERROR:
-                        resultado += "Símbolo no definido\n";
+//                        resultado += lexer.errorDescripcion + "\n";
+                        errores += lexer.lexeme + ": " + lexer.errorDescripcion + "\n";
                         break;
                     case Identificador: 
                         resultado += lexer.lexeme + ": Es un identificador\n";
@@ -225,9 +251,12 @@ public class AnalizadorLexico_form extends javax.swing.JFrame {
     private javax.swing.JButton btnAnalizar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea txtEntrada;
+    private javax.swing.JTextArea txtErrores;
     private javax.swing.JTextArea txtResultado;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,9 +13,22 @@ espacio=[ \t\r\n]+
 
 %{
     public String lexeme;
+    public String errorDescripcion;
 %}
 
 %%
+
+
+{L} {lexeme=yytext(); return Identificador;}
+{DECIMAL} {lexeme=yytext(); return NumeroDecimal;}
+{NEGATIVO} {lexeme=yytext(); return NumeroEntero;}
+{D} {lexeme=yytext(); return NumeroEntero;}
+
+[0-9][a-zA-Z0-9_]* { 
+    lexeme = yytext();
+    errorDescripcion = "Error: un identificador no puede comenzar con un número.";
+    return ERROR; 
+}
 
 "if" {lexeme=yytext(); return If;}
 "else" {lexeme=yytext(); return Else;}
@@ -48,10 +61,9 @@ espacio=[ \t\r\n]+
 "/*"([^*]|\*+[^*/])*\*+"/" {/* Ignore */}
 
 
-{L} {lexeme=yytext(); return Identificador;}
-{DECIMAL} {lexeme=yytext(); return NumeroDecimal;}
-{NEGATIVO} {lexeme=yytext(); return NumeroEntero;}
-{D} {lexeme=yytext(); return NumeroEntero;}
 
-
-. {return ERROR;}
+. {
+    lexeme = yytext();
+    errorDescripcion = "Error: carácter no reconocido: " + lexeme;
+    return ERROR;
+}
